@@ -1,0 +1,66 @@
+全局API
+  现在每个VUE实例不再共享全局config属性
+  如果想要共享，可以使用工厂函数
+
+更快
+  重写的虚拟dom算法
+
+更小
+  公共API与不再直接暴露出来，请自行导入使用，如：
+  Vue.nextTick（this.$nextTick）、Vue.set、Vue.delete 报错 undefined is not a function
+  请使用 import { nextTick, set, delete } from 'vue'
+  内部组件，<transtion>、<keep-alive>... 编译后 import { transtion, keepAlive } from 'vue'
+  内部指令 v-show、v-if... 编译后 import { vShow, vIf  } from 'vue'
+  ...
+  为什么？ 需要使用才导入，减小体积
+
+
+
+
+其他
+  不再支持keyCode修饰v-on v-on:keyup.13 => v-on:keyup:enter
+
+  过渡类名
+        .v-enter => .v-enter-from
+        .v-leave => .v-leave-from
+  
+  v-model
+        可使用多个v-model, 不再需要.async修饰符
+  
+  新增Suspence组件 => 组件loading完成前显示后备内容
+  新增teleport组件（portal） => 传送组件内容到根节点以外的任何地方
+
+更友好
+  首先看到VUE2组件的缺陷
+    1. 组件越来越大，可读性和可维护性越来越差
+      数据通通放在data中，处理逻辑通通放在methods中，需要在mounted作的所有处理通通放在mounted回调方法中......
+      要在一个很大的组件中修改一个功能，就要跳到各个属性找，如果组件里面还用了mixins，还得跳文件看。。。
+      组件的一个功能分散在options对象的各种属性中
+    2. 没有一个特别好的模式在多个组件复用同一段代码 mixins 、 作用域插槽、
+      mixins有什么问题？
+        可读性太差，得跳到mixins所在的文件中才能知道它到底有什么，
+      作用域插槽有什么问题？
+        成倍的配置项，props绑定满天飞
+        组件数量上升导致性能（可能）下降
+    3. 对typeScript的支持有限
+  
+  何时使用componsition API？
+    1. 按功能来聚合代码
+    2. 更好地复用代码
+    3. 更好地支持typeScript
+
+    想要修改某个业务逻辑时，不需要满大街找散布各地的数据和方法了，直击痛源
+    响应式属性与组件解耦，属性是可控的，体现在复用别人写的代码时，遇到自己不想要的属性（不导入这个属性），
+    或者某个属性不符合自己的业务预期，要稍微修改一下逻辑（导入进来 => 修改之后导出），
+
+    在setup中同样可以调用生命周期钩子，但需要自行导入
+    mounted => import { onMounted } from 'vue'
+                ...
+               setup() {
+                 onMounted() {
+                   // do something
+                 }
+               }
+    ！ beforeCreate 和 created 在componsition API中已经不再需要了，直接将代码放在setup中即可
+
+    watchEffect vs watch
