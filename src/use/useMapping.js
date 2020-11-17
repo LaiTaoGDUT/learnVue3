@@ -1,6 +1,6 @@
-import { ref } from 'vue';
+import { reactive } from 'vue';
 
 export default function useMapping() {
-  const mapData = ref(new Map([['a', 97], ['b', 98]]));
+  const mapData = reactive([['a', 97], ['b', 98]]);
   return { mapData };
 }

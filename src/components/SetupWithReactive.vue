@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p>Space Left: {{ spacesLeft }} out of {{ capacity }}</p>
     <p>Capacity: {{ capacity }}</p>
-    <button @click="increaseCapacity">Increase Capacity</button>
     <h2>Attending</h2>
     <ul>
       <li v-for="(name, index) in attending" :key="index">
@@ -13,7 +11,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue';
+import { reactive, toRefs, watch, onMounted } from 'vue';
 
 export default {
   // use reactive
@@ -21,14 +19,14 @@ export default {
     const event = reactive({
       capacity: 3,
       attending: ['tim', 'Bob', 'Joe'],
-      spacesLeft: computed(() => {
-        return event.capacity - event.attending.length;
-      })
     });
-    function increaseCapacity() {
-      event.capacity += 1;
-    }
-    return { ...toRefs(event), increaseCapacity };
+    watch(event, () => {
+      console.log('something changed!');
+    });
+    onMounted(() => {
+      event.attending[0] = 'Jack';
+    });
+    return { ...toRefs(event) };
   }
 }
 </script>

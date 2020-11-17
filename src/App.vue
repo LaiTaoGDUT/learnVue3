@@ -1,23 +1,23 @@
 <template>
-  <!-- <setup-with-ref></setup-with-ref> -->
+  <setup-with-ref></setup-with-ref>
   <!-- <setup-with-ref2></setup-with-ref2> -->
-  <setup-with-watch-effect></setup-with-watch-effect>
-  <!-- <setup-with-reactive></setup-with-reactive> -->
+  <!-- <setup-with-watch-effect></setup-with-watch-effect> -->
+  <setup-with-reactive></setup-with-reactive>
 </template>
 
 <script>
-// import SetupWithRef from './components/SetupWithRef.vue';
+import SetupWithRef from './components/SetupWithRef.vue';
 // import SetupWithRef2 from './components/SetupWithRef2.vue';
-// import SetupWithReactive from './components/SetupWithReactive.vue';
-import SetupWithWatchEffect from './components/SetupWithWatchEffect.vue';
+import SetupWithReactive from './components/SetupWithReactive.vue';
+// import SetupWithWatchEffect from './components/SetupWithWatchEffect.vue';
 
 export default {
   name: 'App',
   components: {
-    // SetupWithRef,
+    SetupWithRef,
     // SetupWithRef2,
-    // SetupWithReactive,
-    SetupWithWatchEffect
+    SetupWithReactive,
+    // SetupWithWatchEffect
   },
   data() {
     return {
