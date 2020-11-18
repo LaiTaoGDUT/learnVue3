@@ -43,32 +43,50 @@ const reactivehandler = {
     get(target, key, receiver) {
         const dep = getDep(target, key);
         dep.depend();
-        return Reflect.get(target, key, receiver)
+        return target[key];
     },
 
-    set(targat, key, value) {
+    set(target, key, value) {
         const dep = getDep(target, key);
-        const result = Reflect.set(target, key, value, receiver);
+        target[key] = value;
         dep.notify();
-        return result;
+        return true;
     }
 }
 
-
+// Vue3
 function reactive(raw) {
     return new Proxy(raw, reactivehandler);
 }
 
-const dep = new Dep('hello');
+// Vue2
+// function reactive(raw) {
+//     Object.keys(raw).forEach((key) => {
+//         const dep = new Dep();
+//         let value = raw[key];
+
+//         Object.defineProperty(raw, key, {
+//             get() {
+//                 dep.depend();
+//                 return value;
+//             },
+//             set(newValue) {
+//                 value = newValue;
+//                 dep.notify();
+//             }
+//         })
+//     })
+//     return raw;
+// }
 
 const state = reactive({
-    conut: 0
+    count: 0
 });
 
 watchEffect(() => {
     console.log(state.count);
 })
 
-dep.value = 'changed';
+state.count += 1;
 
 </script>

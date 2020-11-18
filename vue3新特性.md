@@ -1,11 +1,16 @@
 # Vue3 vs Vue2
 
+
+
+
+
 ## 更快
 
-更快的虚拟dom算法，源自编译模板时给予更多的运行时提示
+传统的虚拟dom算法：
 
-传统的虚拟dom算法：组件patch的时候，需要重新创建整个vdom树，然后遍历整棵树进行diff，update
-全新的更新策略：
+组件patch的时候，需要重新创建整个vdom树，然后遍历整棵树进行diff，update
+
+更快的虚拟dom算法，源自编译模板时给予更多的运行时提示：
 
 1. 编译模板时对动态内容进行patch标记，告诉patch算法只关注被标记的动态部分
 
@@ -23,7 +28,7 @@
 
 ## 更小
 
-### 全局API
+### 全局API的使用
 全局 API 现在只能作为 ES 模块构建的命名导出进行访问。
 
 #### Vue2
@@ -34,7 +39,7 @@ import { nextTick, set, delete, ... } from 'vue';
 
 nextTick();
 
-### 内部组件
+### 内部组件的使用
 
 transtion组件、keepAlive组件、 ...
 
@@ -42,30 +47,29 @@ transtion组件、keepAlive组件、 ...
 
 import { transtion, keepAlive, ... } from 'vue'
 
-### 内部helper
-v-show、... 
+### 内部helper的使用
+v-show、v-model... 
 
 complier编译后
 
-import { vShow, ...  } from 'vue'
+import { vShow, vModel ...  } from 'vue'
 
-意味着只有在应用程序实际使用了某个API或者组件的时候才会导入它。没有使用到的功能代码将不会出现在最终的构建包中。框架体积还会成为选择框架的考虑因素吗？
-
-
+意味着只有在应用程序实际使用了某个API或者组件的时候才会导入它。没有使用到的功能代码将不会出现在最终的构建包中。框架体积进一步缩小。
 
 
 
-## 更友好
+
+
+## 更友好？
 #### VUE2组件现存的缺陷
 
-1. 组件越来越大，可读性和可维护性越来越差。根本原因在于Vue使用的option API：迫使你必须按配置(options)来组织代码，你需要把一个功能的实现分布在各个配置里：data，computed，watcher，methods，但是在某些情况下按功能来组织代码更合理。如果要在一个很大的组件中修改一个功能，就要跳到各个属性找，如果组件里面还用了mixins，还得跳文件看
+1. 组件越来越大，可读性和可维护性越来越差。根本原因在于Vue使用的option API：必须按配置(options)来组织代码，你需要把一个功能的实现分布在各个配置里：data，computed，watcher，methods，但是在某些情况下按功能来组织代码更合理。如果要在一个很大的组件中修改一个功能，就要跳到各个属性找，如果组件里面还用了mixins，还得跳文件看
 
 2. mixins无法特别好的在多个组件中复用同一段代码  
     mixins有什么问题？
     可读性太差，得跳到mixins所在的文件中才能知道它到底有什么
     不同的mixins容易冲突
-    
-    复用其他同伴的mixins的时候，有些代码不合自己的预期，但是又不敢改。。。
+    复用其他同伴的mixins的时候，有些代码不合自己的预期，但是不能随意更改
     
 3. ~~对typeScript的支持有限~~
 
@@ -176,7 +180,9 @@ stop(); // 停止监听
 
 [New script setup and ref sugar](https://github.com/vuejs/rfcs/pull/222)
 
-前阵子，Vue3.0提出了两个新提案
+前阵子，Vue3.0提出了两个新提案，分别为script-setup提案与ref-suger提案
+
+对于以下源代码：
 
 ```javascript
 <script>
@@ -193,9 +199,7 @@ export default {
 </script>
 ```
 
-
-
-**script-setup 提案，将 options.setup 提取到代码顶层。**
+**使用script-setup 提案，将 options.setup 提取到代码顶层，所有顶层声明默认导出为模板使用**
 
 ```javascript
 <script setup>
@@ -206,14 +210,13 @@ const inc = () => { count.value++ }
 </script>
 ```
 
-
-
-**ref-sugar 提案，将 ref.value 的写法，做进一步简化。**
+**使用ref-sugar 提案，将 ref.value 的写法，做进一步简化，放弃[标记语句](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/label)，将其作为ref声明的语法糖。**
 
 ```javascript
 <script setup>
 ref: count = 1
 const inc = () => { count++ }
+// 通过添加$前缀来访问响应式对象
 console.log($count.value)
 </script>
 ```
